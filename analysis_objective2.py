@@ -56,7 +56,7 @@ home["goal_difference"] = home["goals_scored"] - home["opponent_goals_scored"]
 p21 = [
     "fifa_rank_advantage", "elo_advantage", "age_difference",
     "value_advantage_eur_m", "host_nation", "opponent_host_nation",
-    "stage_numeric", "match_number"
+    "stage", "match_number"
 ]
 d21 = home[["match_id", "team", "opponent_team"] + p21 +
            ["goals_scored", "opponent_goals_scored", "goal_difference"]].copy()
@@ -67,7 +67,7 @@ d21.to_csv(OUT / "regression_2_1_dataset.csv", index=False)
 p22 = [
     "fifa_rank_advantage", "elo_advantage", "age_difference",
     "value_advantage_eur_m", "home_away", "host_nation",
-    "stage_numeric", "match_number"
+    "stage", "match_number"
 ]
 d22 = team[["match_id", "team", "opponent_team"] + p22 + ["goals_scored"]].copy()
 assert d22.shape[0] == 208 and len(p22) == 8
