@@ -33,7 +33,7 @@ assert int(raw["goals_scored"].sum()) == 308
 
 # Add opponent information by reversing each two-row match.
 opp_cols = ["team", "fifa_rank", "elo_rating", "squad_avg_age",
-            "squad_total_value_eur_m", "goals_scored"]
+            "squad_total_value_eur_m", "host_nation", "goals_scored"]
 opp = raw[["match_id"] + opp_cols].copy()
 opp = opp.rename(columns={c: f"opponent_{c}" for c in opp_cols})
 team = raw.merge(opp, on="match_id")
