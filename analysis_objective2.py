@@ -41,12 +41,22 @@ team = team[team["team"] != team["opponent_team"]].copy()
 assert len(team) == 208
 
 # Objective 2.1: one row per actual match. Exactly eight pre-match predictors.
+# Difference features preserve the pre-match comparison while reducing the severe
+# multicollinearity produced by entering both rankings/ratings as separate terms.
+for frame in (team,):
+    frame["fifa_rank_advantage"] = frame["opponent_fifa_rank"] - frame["fifa_rank"]
+    frame["elo_advantage"] = frame["elo_rating"] - frame["opponent_elo_rating"]
+    frame["age_difference"] = frame["squad_avg_age"] - frame["opponent_squad_avg_age"]
+    frame["value_advantage_eur_m"] = (frame["squad_total_value_eur_m"] -
+                                      frame["opponent_squad_total_value_eur_m"])
+    frame["host_advantage"] = frame["host_nation"] - frame["opponent_host_nation"]
+
 home = team[team["home_away"] == 1].copy()
 home["goal_difference"] = home["goals_scored"] - home["opponent_goals_scored"]
 p21 = [
-    "fifa_rank", "opponent_fifa_rank", "elo_rating", "opponent_elo_rating",
-    "squad_avg_age", "opponent_squad_avg_age",
-    "squad_total_value_eur_m", "opponent_squad_total_value_eur_m"
+    "fifa_rank_advantage", "elo_advantage", "age_difference",
+    "value_advantage_eur_m", "host_nation", "opponent_host_nation",
+    "stage_numeric", "match_number"
 ]
 d21 = home[["match_id", "team", "opponent_team"] + p21 +
            ["goals_scored", "opponent_goals_scored", "goal_difference"]].copy()
@@ -55,8 +65,9 @@ d21.to_csv(OUT / "regression_2_1_dataset.csv", index=False)
 
 # Objective 2.2: one row per team per match. Exactly eight pre-match predictors.
 p22 = [
-    "fifa_rank", "opponent_fifa_rank", "elo_rating", "opponent_elo_rating",
-    "home_away", "host_nation", "squad_avg_age", "squad_total_value_eur_m"
+    "fifa_rank_advantage", "elo_advantage", "age_difference",
+    "value_advantage_eur_m", "home_away", "host_nation",
+    "stage_numeric", "match_number"
 ]
 d22 = team[["match_id", "team", "opponent_team"] + p22 + ["goals_scored"]].copy()
 assert d22.shape[0] == 208 and len(p22) == 8
