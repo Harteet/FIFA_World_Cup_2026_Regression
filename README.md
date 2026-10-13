@@ -50,3 +50,6 @@ Generated `results/` and `figures/` folders are produced by the script and uploa
 
 ## Reproducibility note
 All model performance reported in the group report should be taken from the generated result files rather than manually typed calculations.
+
+## Week 9 tutor-feedback analysis
+Run `python analysis_week9.py` after installing requirements. This uses the same source CSV and eight predictors for each objective, exports sample data snippets and eight scatterplots, and checks OLS preprocessing with StandardScaler versus Yeo–Johnson using leakage-safe cross-validation (GroupKFold by match for Objective 2.2). Outputs appear in `week9_results/`. The original `analysis_objective2.py` and its automated workflow remain unchanged. The report prioritises one OLS model family; the preprocessing comparison is a sensitivity check, not a comparison of unrelated models.
